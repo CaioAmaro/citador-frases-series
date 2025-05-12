@@ -1,19 +1,26 @@
 package br.com.alura.desafio.citador.service;
 
+import br.com.alura.desafio.citador.dto.CitacaoDTO;
+import br.com.alura.desafio.citador.model.Citacao;
+import br.com.alura.desafio.citador.repository.CitacaoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CitacaoService {
-    private ConsumoGemini consumoGemini;
-    private ConsumoApi consumoApi;
-    private final String ENDERECO = "https://www.omdbapi.com/?t=";
-    private final String API_KEY = "&apikey=afd46234";
 
-    //ENDERECO + nomeSerie.replace(" ", "+") + API_KEY
-    public void gerar(){
-        String nomeSerie = ConsumoGemini.obterNomeSerie();
-//        String json = consumoApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-        System.out.println(nomeSerie);
-//        System.out.println(json);
+    @Autowired
+    private CitacaoRepository citacaoRepository;
+
+    public CitacaoDTO converterCitacao(Citacao citacao){
+        return new CitacaoDTO(
+                citacao.getTitulo(),
+                citacao.getFrase(),
+                citacao.getPersonagem(),
+                citacao.getPoster());
+    }
+
+    public CitacaoDTO sortearFrase() {
+        return converterCitacao(citacaoRepository.sortearFrase());
     }
 }
